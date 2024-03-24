@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: FixErrorHelper
+Bundle-SymbolicName: com.plugin.fixerrorhelper;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.plugin.fixerrorhelper.Activator
+Bundle-Vendor: FixErrorHelper
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Automatic-Module-Name: com.plugin.fixerrorhelper
+Bundle-ActivationPolicy: lazy
