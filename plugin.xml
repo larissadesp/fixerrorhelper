@@ -51,5 +51,38 @@
          </toolbar>
       </menuContribution>
    </extension>
+   
+<!-- preferences page -->
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.ui.preferencePages.Workbench"
+            class="com.plugin.fixerrorhelper.preferences.PluginPreferencePage"
+	        id="com.plugin.fixerrorhelper.preference.page"
+	        name="FixErrorHelper">
+	  </page>
+   </extension>
+
+<!--   <extension-->
+<!--         point="org.eclipse.ui.console.consolePatternMatchListeners">-->
+<!--      <consolePatternMatchListener-->
+<!--            class="com.plugin.fixerrorhelper.util.ConsoleMessageManager"-->
+<!--            id="com.plugin.fixerrorhelper.util.ConsoleMessageManager"-->
+<!--            regex="Caused by*">-->
+<!--         <enablement>-->
+<!--		    <or>-->
+<!--			   <test -->
+<!--			         property="org.eclipse.ui.console.consoleTypeTest" -->
+<!--			         value="javaStackTraceConsole"/>-->
+<!--		       <test -->
+<!--			         property="org.eclipse.debug.ui.processTypeTest" -->
+<!--				     value="java"/>-->
+<!--			   <test -->
+<!--				     property="org.eclipse.debug.ui.processTypeTest" -->
+<!--				     value="org.eclipse.ant.ui.antProcess"/>-->
+<!--			</or>-->
+<!--		</enablement>-->
+<!--      </consolePatternMatchListener>-->
+<!--   </extension>-->
 
 </plugin>

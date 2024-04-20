@@ -4,9 +4,16 @@ Bundle-Name: FixErrorHelper
 Bundle-SymbolicName: com.plugin.fixerrorhelper;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: com.plugin.fixerrorhelper.Activator
+Bundle-ClassPath: .,
+ lib/json-20240303.jar
 Bundle-Vendor: FixErrorHelper
 Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime
+ org.eclipse.core.runtime,
+ org.eclipse.ui.console;bundle-version="3.13.100",
+ org.eclipse.jface.text;bundle-version="3.24.200",
+ org.apache.httpcomponents.httpclient;bundle-version="4.5.14",
+ org.apache.httpcomponents.httpcore;bundle-version="4.4.16",
+ org.apache.commons.lang3;bundle-version="3.14.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Automatic-Module-Name: com.plugin.fixerrorhelper
 Bundle-ActivationPolicy: lazy
