@@ -11,6 +11,7 @@ import com.plugin.fixerrorhelper.api.ChatGPT;
 import com.plugin.fixerrorhelper.handlers.PluginMessageHandler;
 import com.plugin.fixerrorhelper.util.ConsoleMessageManager;
 import com.plugin.fixerrorhelper.util.GPTMessageManager;
+import com.plugin.fixerrorhelper.util.PluginMessageManager;
 
 public class Activator extends AbstractUIPlugin {
 
@@ -25,58 +26,65 @@ public class Activator extends AbstractUIPlugin {
 	private static Activator plugin;
 	private ConsoleMessageManager consoleMessageManager;
 	private GPTMessageManager gptMessageManager;
+	private PluginMessageManager pluginMessageManager;
 	private ChatGPT chatGPT;
-	public static JSONObject apiResponseInJson;
+	private PluginMessageHandler pluginMessageHandler;
+	private static JSONObject apiResponseInJson;
 
 	public static String responseChatGPT = "";
 
 	public Activator() {
 		consoleMessageManager = new ConsoleMessageManager();
 		gptMessageManager = new GPTMessageManager();
+		pluginMessageManager = new PluginMessageManager();
 		chatGPT = new ChatGPT();
+		pluginMessageHandler = new PluginMessageHandler();
 	}
 
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-
+		
 		String consoleOutput = consoleMessageManager.getProcessConsoleOutput();
 
 		if (StringUtils.isBlank(consoleOutput)) {
 			responseChatGPT = EMPTY_CONSOLE_MESSAGE;
 			return;
 		}
+		
+		if (!consoleMessageManager.isJavaErrorOrException(consoleOutput)) {
+	        responseChatGPT = MESSAGE_NOT_JAVA;
+	        return;
+	    }
+		
+		String normalizedConsoleOutput = gptMessageManager.normalizeConsoleText(consoleOutput);
+		JSONArray instructionGPT = gptMessageManager.assembleApiInstruction(normalizedConsoleOutput);
 
-		if (consoleMessageManager.hasThrowableHierarchy(consoleOutput)) {
-			String normalizedConsoleOutput = gptMessageManager.normalizeConsoleText(consoleOutput);
-			JSONArray instructionGPT = gptMessageManager.assembleApiInstruction(normalizedConsoleOutput);
+		apiResponseInJson = chatGPT.chatGPT(instructionGPT);
 
-			apiResponseInJson = chatGPT.chatGPT(instructionGPT);
+		if (gptMessageManager.isInsufficientQuota(apiResponseInJson)) {
+			responseChatGPT = INSUFFICIENT_QUOTA_MESSAGE;
+			return;
+		}
 
-			if (gptMessageManager.isInsufficientQuota(apiResponseInJson)) {
-				responseChatGPT = INSUFFICIENT_QUOTA_MESSAGE;
+		if (!pluginMessageManager.validateExpectedJson(apiResponseInJson)) {
+			responseChatGPT = ERROR_PROCESSING_MESSAGE;
+			return;
+		}
+
+		try {
+			JSONObject jsonContentMessageForPlugin = new JSONObject(pluginMessageManager.extractContentJson(apiResponseInJson));
+			responseChatGPT = pluginMessageManager.formatResponseForPlugin(jsonContentMessageForPlugin);
+
+			if (!pluginMessageManager.checkIfCompleteAnswer(responseChatGPT)) {
+				responseChatGPT = ERROR_FORMATTING_MESSAGE;
 				return;
 			}
 
-			if (gptMessageManager.validateExpectedJson(apiResponseInJson)) {
-				try {
-					JSONObject jsonContentMessageForPlugin = new JSONObject(gptMessageManager.extractContentJson(apiResponseInJson));
-					responseChatGPT = gptMessageManager.formatResponseForPlugin(jsonContentMessageForPlugin);
-
-					if (gptMessageManager.checkIfCompleteAnswer(responseChatGPT)) {
-						PluginMessageHandler.responseOk = true;
-					} else {
-						responseChatGPT = ERROR_FORMATTING_MESSAGE;
-					}
-				} catch (JSONException e) {
-					responseChatGPT = ERROR_FORMATTING_MESSAGE;
-				}
-			} else {
-				responseChatGPT = ERROR_PROCESSING_MESSAGE;
-			}
-		} else {
-			responseChatGPT = MESSAGE_NOT_JAVA;
+			pluginMessageHandler.responseOk = true;
+		} catch (JSONException e) {
+			responseChatGPT = ERROR_FORMATTING_MESSAGE;
 		}
 	}
 

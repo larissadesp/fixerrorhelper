@@ -20,7 +20,7 @@ public class ChatGPT {
 	private static final String EMPTY_REPLY_MESSAGE = "Empty response from ChatGPT.";
 	private static final String COMUNICATION_ERROR_MESSAGE = "Error communicating with ChatGPT: ";
 	
-	private static String KEY = "sk-..."; //TODO: System.getProperty(Activator.API_KEY);
+	private String KEY = "..."; //TODO: System.getProperty(Activator.API_KEY);
 
 	public JSONObject chatGPT(JSONArray instruction) {
 		try (CloseableHttpClient httpClient = HttpClients.createDefault()) {

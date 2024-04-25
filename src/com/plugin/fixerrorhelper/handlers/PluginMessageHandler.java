@@ -15,33 +15,36 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import com.plugin.fixerrorhelper.Activator;
+import com.plugin.fixerrorhelper.preferences.PluginPreferencePage;
 
 public class PluginMessageHandler extends AbstractHandler {
 
 	private static final String TITLE = "FixErrorHelper";
-	private static final String[] TEXT_SECTION_HEADERS = { "Cause:", "Error:", "Possible solutions:" };
+	private static final String[] TEXT_SECTION_HEADERS = { "Cause:", "Error:", "Possible solution(s):" };
 
-	public static boolean responseOk = false;
+	private PluginPreferencePage preferencePage;
 	
+	public boolean responseOk = false;
+	
+	private String apiKey;
 	private String pluginReturnMessage = "";
 	private Color background;
 	private Display display;
 	private Shell shell;
+	private StyledText styledText;
 
 	public PluginMessageHandler() {
+		preferencePage = new PluginPreferencePage();
 		pluginReturnMessage = Activator.responseChatGPT;
 	}
 
 	@Override
 	public Object execute(ExecutionEvent event) {
-//		TODO: preference page
-//		if (System.getProperty(Activator.API_KEY) != null) {
-//			if (responseOk == true) {
-//				
-//			} else {
-//				
-//			}
-//		}
+		apiKey = preferencePage.getAPIKey();
+		
+		if (apiKey != null && responseOk == true) {
+			System.out.println("API Key 2: " + apiKey);
+		}
 
 		background = new Color(display, 240, 240, 240);
 		display = Display.getDefault();
@@ -50,9 +53,13 @@ public class PluginMessageHandler extends AbstractHandler {
 		createUIComponents(shell);
 		shell.open();
 		
+		shell.addListener(SWT.Close, e -> {
+			disposeResources();
+		});
+		
 		return null;
 	}
-
+	
 	private Shell createShell() {
 		Shell shell = new Shell(display, SWT.SHELL_TRIM | SWT.RESIZE);
 		shell.setText(TITLE);
@@ -69,7 +76,7 @@ public class PluginMessageHandler extends AbstractHandler {
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		composite.setBackground(background);
 
-		StyledText styledText = new StyledText(composite, SWT.WRAP | SWT.READ_ONLY | SWT.V_SCROLL);
+		styledText = new StyledText(composite, SWT.WRAP | SWT.READ_ONLY | SWT.V_SCROLL);
 		styledText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		styledText.setText(pluginReturnMessage);
 		styledText.setBackground(background);
@@ -78,6 +85,8 @@ public class PluginMessageHandler extends AbstractHandler {
 		createOkButton(shell);
 		
 		shell.addListener(SWT.Close, e -> {
+			disposeResources();
+			
 			try {
 				Activator.getDefault().stop(Activator.getDefault().getBundle().getBundleContext());
 			} catch (Exception ex) {
@@ -98,12 +107,12 @@ public class PluginMessageHandler extends AbstractHandler {
 
 				switch (header) {
 				case "Cause:":
-					styleRange.foreground = new Color(display, 255, 215, 0);
+					styleRange.foreground = new Color(display, 255, 190, 0);
 					break;
 				case "Error:":
 					styleRange.foreground = new Color(display, 255, 0, 0);
 					break;
-				case "Possible solutions:":
+				case "Possible solution(s):":
 					styleRange.foreground = new Color(display, 30, 144, 255);
 					break;
 				default:
@@ -121,13 +130,20 @@ public class PluginMessageHandler extends AbstractHandler {
 		okButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false));
 		okButton.addListener(SWT.Selection, e -> {
 			shell.dispose();
-			
+
 			try {
 				Activator.getDefault().stop(Activator.getDefault().getBundle().getBundleContext());
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		});
+	}
+	
+	private void disposeResources() {
+		background.dispose();
+		display.dispose();
+		shell.dispose();
+		styledText.dispose();
 	}
 
 }
