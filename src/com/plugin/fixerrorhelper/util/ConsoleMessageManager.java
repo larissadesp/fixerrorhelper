@@ -13,7 +13,7 @@ public class ConsoleMessageManager {
 
 	private static final String PROCESS_CONSOLE_INTERNAL_CLASS = "org.eclipse.debug.internal.ui.views.console.ProcessConsole";
 
-	public String getProcessConsoleOutput() {
+	public static String getProcessConsoleOutput() {
 		IConsoleManager consoleManager = ConsolePlugin.getDefault().getConsoleManager();
 		IConsole[] consoles = consoleManager.getConsoles();
 
@@ -30,26 +30,12 @@ public class ConsoleMessageManager {
 		return null;
 	}
 
-	public boolean isJavaErrorOrException(String message) {
+	public static boolean isJavaErrorOrException(String message) {
+		String stackTraceRegex = "(?m)^.*?Exception.*(?:\\R+^\\s*at .*)+";
+        Pattern pattern = Pattern.compile(stackTraceRegex);
+        Matcher matcher = pattern.matcher(message);
+		
 		//TODO "return message(?) instanceof Throwable;"
-		if (containsStackTrace(message) && containsBasicErrorKeywords(message)) {
-			return true;
-		}
-
-		return false;
-	}
-
-	private boolean containsStackTrace(String message) {
-		String regex = "^\\s*at\\s+[\\w.$]+\\(.*?\\)";
-		Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-		Matcher matcher = pattern.matcher(message);
-
 		return matcher.find();
 	}
-
-	private boolean containsBasicErrorKeywords(String message) {
-		return message.toLowerCase().contains("error")
-				|| message.toLowerCase().contains("exception");
-	}
-	 
 }
