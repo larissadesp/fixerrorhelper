@@ -1,4 +1,4 @@
-package com.plugin.fixerrorhelper.api;
+package com.plugin.fixerrorhelper.core.gpt.client;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -13,16 +13,19 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class ChatGPT {
+import com.plugin.fixerrorhelper.core.gpt.GPTClient;
+
+public class GPTHttpClient implements GPTClient {
 
 	private static final String URL = "https://api.openai.com/v1/chat/completions";
 	private static final String MODEL = "gpt-3.5-turbo-0125";
 	private static final String EMPTY_REPLY_MESSAGE = "Empty response from ChatGPT.";
 	private static final String COMUNICATION_ERROR_MESSAGE = "Error communicating with ChatGPT: ";
 	
-	private String KEY = "..."; //TODO: System.getProperty(Activator.API_KEY);
+	private String KEY = "...";
 
-	public JSONObject chatGPT(JSONArray instruction) {
+	@Override
+	public JSONObject call(JSONArray instruction) {
 		try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
 			HttpPost request = new HttpPost(URL);
 			request.addHeader("Authorization", "Bearer " + KEY);
@@ -50,5 +53,4 @@ public class ChatGPT {
 			throw new RuntimeException(COMUNICATION_ERROR_MESSAGE + e.getMessage(), e);
 		}
 	}
-
 }
