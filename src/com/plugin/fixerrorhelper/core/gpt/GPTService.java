@@ -6,6 +6,7 @@ import org.json.JSONException;
 import com.plugin.fixerrorhelper.util.ConsoleMessageManager;
 
 public class GPTService {
+	
 	private static final String INSUFFICIENT_QUOTA_MESSAGE = "You exceeded your current quota, please check your plan and billing details.";
 	private static final String ERROR_FORMATTING_MESSAGE = "An error occurred while formatting the response.";
 	private static final String ERROR_PROCESSING_MESSAGE = "An error occurred while processing the message return. Try again.";
@@ -16,15 +17,13 @@ public class GPTService {
 		if (StringUtils.isBlank(consoleText)) {
 			return EMPTY_CONSOLE_MESSAGE;
 		}
-		
+
 		if (!ConsoleMessageManager.isJavaErrorOrException(consoleText)) {
 			return MESSAGE_NOT_JAVA;
-	    }
-		
-		var result = GPTCaller
-				.init(consoleText)
-				.call();
-		
+		}
+
+		var result = GPTCaller.init(consoleText).call();
+
 		if (result.isInsufficientQuota()) {
 			return INSUFFICIENT_QUOTA_MESSAGE;
 		}
@@ -43,4 +42,5 @@ public class GPTService {
 			return ERROR_FORMATTING_MESSAGE;
 		}
 	}
+	
 }

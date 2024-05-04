@@ -53,36 +53,25 @@
    </extension>
    
 <!-- preferences page -->
+   <extension 
+         point="org.eclipse.equinox.preferences.preferences">
+      <initializer 
+            class="com.plugin.fixerrorhelper.preferences.PluginPreferenceInitializer"/>
+   </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
-      <page
-            category="org.eclipse.ui.preferencePages.Workbench"
+   	  <page
             class="com.plugin.fixerrorhelper.preferences.PluginPreferencePage"
 	        id="com.plugin.fixerrorhelper.preference.page"
 	        name="FixErrorHelper">
+	        <keywordReference id="com.plugin.fixerrorhelper.keywords"/>
 	  </page>
    </extension>
-
-<!--   <extension-->
-<!--         point="org.eclipse.ui.console.consolePatternMatchListeners">-->
-<!--      <consolePatternMatchListener-->
-<!--            class="com.plugin.fixerrorhelper.util.ConsoleMessageManager"-->
-<!--            id="com.plugin.fixerrorhelper.util.ConsoleMessageManager"-->
-<!--            regex="Caused by*">-->
-<!--         <enablement>-->
-<!--		    <or>-->
-<!--			   <test -->
-<!--			         property="org.eclipse.ui.console.consoleTypeTest" -->
-<!--			         value="javaStackTraceConsole"/>-->
-<!--		       <test -->
-<!--			         property="org.eclipse.debug.ui.processTypeTest" -->
-<!--				     value="java"/>-->
-<!--			   <test -->
-<!--				     property="org.eclipse.debug.ui.processTypeTest" -->
-<!--				     value="org.eclipse.ant.ui.antProcess"/>-->
-<!--			</or>-->
-<!--		</enablement>-->
-<!--      </consolePatternMatchListener>-->
-<!--   </extension>-->
+   <extension 
+         point="org.eclipse.ui.keywords">
+      <keyword 
+            id="com.plugin.fixerrorhelper.keywords"
+            label="error helper key language"/>
+   </extension>
 
 </plugin>

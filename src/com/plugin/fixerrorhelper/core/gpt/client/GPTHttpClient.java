@@ -13,6 +13,8 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.plugin.fixerrorhelper.Activator;
+import com.plugin.fixerrorhelper.constants.PreferenceConstants;
 import com.plugin.fixerrorhelper.core.gpt.GPTClient;
 
 public class GPTHttpClient implements GPTClient {
@@ -21,8 +23,8 @@ public class GPTHttpClient implements GPTClient {
 	private static final String MODEL = "gpt-3.5-turbo-0125";
 	private static final String EMPTY_REPLY_MESSAGE = "Empty response from ChatGPT.";
 	private static final String COMUNICATION_ERROR_MESSAGE = "Error communicating with ChatGPT: ";
-	
-	private String KEY = "...";
+
+	private String KEY = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.FIELD_API_KEY);
 
 	@Override
 	public JSONObject call(JSONArray instruction) {
@@ -43,7 +45,7 @@ public class GPTHttpClient implements GPTClient {
 				if (entity != null) {
 					String responseBody = EntityUtils.toString(entity);
 					JSONObject jsonResponse = new JSONObject(responseBody);
-					
+
 					return jsonResponse;
 				} else {
 					throw new RuntimeException(EMPTY_REPLY_MESSAGE);
@@ -53,4 +55,5 @@ public class GPTHttpClient implements GPTClient {
 			throw new RuntimeException(COMUNICATION_ERROR_MESSAGE + e.getMessage(), e);
 		}
 	}
+
 }

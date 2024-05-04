@@ -32,10 +32,11 @@ public class ConsoleMessageManager {
 
 	public static boolean isJavaErrorOrException(String message) {
 		String stackTraceRegex = "(?m)^.*?Exception.*(?:\\R+^\\s*at .*)+";
-        Pattern pattern = Pattern.compile(stackTraceRegex);
-        Matcher matcher = pattern.matcher(message);
-		
-		//TODO "return message(?) instanceof Throwable;"
+		Pattern pattern = Pattern.compile(stackTraceRegex);
+		Matcher matcher = pattern.matcher(message);
+
+		// TODO "return message(?) instanceof Throwable;"
 		return matcher.find();
 	}
+	
 }
