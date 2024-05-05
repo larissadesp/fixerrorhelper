@@ -18,7 +18,7 @@ public class GPTService {
 			return EMPTY_CONSOLE_MESSAGE;
 		}
 
-		if (!ConsoleMessageManager.isJavaErrorOrException(consoleText)) {
+		if (!(ConsoleMessageManager.isStackTrace(consoleText) && ConsoleMessageManager.isJavaLangException(consoleText))) {
 			return MESSAGE_NOT_JAVA;
 		}
 

@@ -1,5 +1,7 @@
 package com.plugin.fixerrorhelper.handlers;
 
+import java.util.Objects;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 
@@ -17,8 +19,12 @@ public class PluginMessageHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) {
 		String consoleOutput = ConsoleMessageManager.getProcessConsoleOutput();
+		
+		if (Objects.isNull(consoleOutput) || consoleOutput.isBlank()) {
+			return null;
+		}
+		
 		var message = GPTService.makeFriendlyConsole(consoleOutput);
-
 		FriendlyConsoleOutput.init(message)
 							 .draw(e -> { Activator.stop(); })
 							 .open();
