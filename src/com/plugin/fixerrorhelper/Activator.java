@@ -4,16 +4,15 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 public class Activator extends AbstractUIPlugin {
-	
 	public static final String PLUGIN_ID = "com.plugin.fixerrorhelper"; //$NON-NLS-1$
-	private static Activator plugin;
+	private static Activator INSTANCE;
 
 	public Activator() {}
 
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		plugin = this;
+		INSTANCE = this;
 	}
 
 	@Override
@@ -22,20 +21,15 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	public static Activator getDefault() {
-		return plugin;
+		return INSTANCE;
 	}
 
 	public static void stop() {
 		try {
-			plugin.stop(plugin.getBundle().getBundleContext());
+			INSTANCE.stop(INSTANCE.getBundle().getBundleContext());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	//TODO
-	public static String getPreference(String key) {
-        return getDefault().getPreferenceStore().getString(key);
-    }
 
 }

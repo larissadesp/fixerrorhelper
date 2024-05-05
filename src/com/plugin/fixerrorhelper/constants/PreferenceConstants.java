@@ -1,12 +1,10 @@
 package com.plugin.fixerrorhelper.constants;
 
 public class PreferenceConstants {
-
-	public static final String API_KEY_PREFERENCE = "apiKeyPreference";
-	public static final String LANGUAGE_PREFERENCE = "languagePreference";
+	public static final String PREFERENCE_API_KEY = "API_KEY";
+	public static final String PREFERENCE_LANGUAGE = "LANGUAGE";
 	
-	public static final String FIELD_API_KEY = "API_KEY";
-	public static final String FIELD_LANGUAGE = "LANGUAGE";
+	public static final String PREFERENCE_FILE = "fix-error-plugin.conf";
 
 	public static final String LABEL_API_KEY = "Enter your OpenAi API Key:";
 	public static final String LABEL_LANGUAGE = "Select return language:";
