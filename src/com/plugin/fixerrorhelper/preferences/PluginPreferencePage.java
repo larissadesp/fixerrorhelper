@@ -38,9 +38,6 @@ public class PluginPreferencePage extends FieldEditorPreferencePage implements I
 	public void init(IWorkbench workbench) {
 		setDescription(PreferenceConstants.DESCRIPTION);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		
-		System.out.println(PreferenceHelper.getApiKey(getPreferenceStore()));
-		System.out.println(PreferenceHelper.getLanguage(getPreferenceStore()));
 	}
 
 	@Override
