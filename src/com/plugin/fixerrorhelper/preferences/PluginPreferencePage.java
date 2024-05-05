@@ -3,7 +3,9 @@ package com.plugin.fixerrorhelper.preferences;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -22,6 +24,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.plugin.fixerrorhelper.Activator;
 import com.plugin.fixerrorhelper.constants.PreferenceConstants;
+import com.plugin.fixerrorhelper.core.gpt.model.Language;
 
 public class PluginPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -43,27 +46,16 @@ public class PluginPreferencePage extends FieldEditorPreferencePage implements I
 		mainComposite.setLayout(new GridLayout());
 		mainComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
         
-		addSpace();
-		createApiFieldEditor();
-		addSpace();
-		createLanguageFieldEditor();
-	}
-
-	@Override
-	public boolean performOk() {
-		//TODO
-		boolean result = super.performOk();
-		return result;
-	}
-
-	protected void createApiFieldEditor() {
 		Group group = addGroup("API Settings");
-
-		Label apiKeyLabel = new Label(group, SWT.NONE);
-		apiKeyLabel.setText(PreferenceConstants.LABEL_API_KEY);
-		apiKeyLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		
-		StringFieldEditor apiKeyFieldEditor = new StringFieldEditor(PreferenceConstants.FIELD_API_KEY, "", group);
+		addSpace();
+		createApiFieldEditor(group);
+		addSpace();
+		createLanguageFieldEditor(group);
+	}
+
+	protected void createApiFieldEditor(Group group) {
+		StringFieldEditor apiKeyFieldEditor = new StringFieldEditor(PreferenceConstants.PREFERENCE_API_KEY, "Your API Key", group);
 		apiKeyFieldEditor.setEmptyStringAllowed(false);
 		apiKeyFieldEditor.setErrorMessage(PreferenceConstants.ERROR_MESSAGE);
 		apiKeyFieldEditor.getTextControl(group).setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
@@ -73,26 +65,14 @@ public class PluginPreferencePage extends FieldEditorPreferencePage implements I
 		addLink(group, "Click here to get API key", "https://platform.openai.com/api-keys");
 	}
 
-	protected void createLanguageFieldEditor() {
-		Group group = addGroup("Language");
-
-		Label languageLabel = new Label(group, SWT.NONE);
-		languageLabel.setText(PreferenceConstants.LABEL_LANGUAGE);
-		languageLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-
-		Combo languageCombo = new Combo(group, SWT.READ_ONLY);
-		languageCombo.add("English");
-		languageCombo.add("Portuguese");
-		languageCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-
-		languageCombo.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				int selectedIndex = languageCombo.getSelectionIndex();
-				String selectedValue = languageCombo.getItem(selectedIndex);
-				//TODO
-			}
-		});
+	protected void createLanguageFieldEditor(Group group) {
+		String[][] values = Language.keyMap();
+		ComboFieldEditor languageEditor = new ComboFieldEditor(PreferenceConstants.PREFERENCE_LANGUAGE, PreferenceConstants.LABEL_LANGUAGE, values, group);
+	
+		languageEditor.getLabelControl(group).setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		languageEditor.getLabelControl(group).setToolTipText(PreferenceConstants.HELP_MESSAGE);
+		
+		addField(languageEditor);
 	}
 
 	protected void addLink(Group group, String text, String url) {

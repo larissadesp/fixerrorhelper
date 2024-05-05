@@ -12,10 +12,15 @@ public class PluginPreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
-		//TODO
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-
-		store.setValue(PreferenceConstants.FIELD_API_KEY, "...");
+		
+		if (!store.contains(PreferenceConstants.PREFERENCE_API_KEY)) {
+			store.setValue(PreferenceConstants.PREFERENCE_API_KEY, "Your API Key");
+		}
+		
+		if (!store.contains(PreferenceConstants.PREFERENCE_LANGUAGE)) {
+			store.setValue(PreferenceConstants.PREFERENCE_LANGUAGE, "EN");
+		}
 	}
 
 }

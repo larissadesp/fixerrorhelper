@@ -23,14 +23,17 @@ public class GPTHttpClient implements GPTClient {
 	private static final String MODEL = "gpt-3.5-turbo-0125";
 	private static final String EMPTY_REPLY_MESSAGE = "Empty response from ChatGPT.";
 	private static final String COMUNICATION_ERROR_MESSAGE = "Error communicating with ChatGPT: ";
-
-	private String KEY = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.FIELD_API_KEY);
+	private final String apiKey;
+	
+	public GPTHttpClient(String apiKey) {
+		this.apiKey = apiKey;
+	}
 
 	@Override
 	public JSONObject call(JSONArray instruction) {
 		try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
 			HttpPost request = new HttpPost(URL);
-			request.addHeader("Authorization", "Bearer " + KEY);
+			request.addHeader("Authorization", "Bearer " + apiKey);
 			request.addHeader("Content-Type", "application/json");
 
 			JSONObject requestBody = new JSONObject();
