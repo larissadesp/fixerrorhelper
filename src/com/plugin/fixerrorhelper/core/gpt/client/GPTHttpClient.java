@@ -13,16 +13,13 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.plugin.fixerrorhelper.Activator;
-import com.plugin.fixerrorhelper.constants.PreferenceConstants;
 import com.plugin.fixerrorhelper.core.gpt.GPTClient;
+import com.plugin.fixerrorhelper.messages.Messages;
 
 public class GPTHttpClient implements GPTClient {
 
 	private static final String URL = "https://api.openai.com/v1/chat/completions";
 	private static final String MODEL = "gpt-3.5-turbo-0125";
-	private static final String EMPTY_REPLY_MESSAGE = "Empty response from ChatGPT.";
-	private static final String COMUNICATION_ERROR_MESSAGE = "Error communicating with ChatGPT: ";
 	private final String apiKey;
 	
 	public GPTHttpClient(String apiKey) {
@@ -51,11 +48,11 @@ public class GPTHttpClient implements GPTClient {
 
 					return jsonResponse;
 				} else {
-					throw new RuntimeException(EMPTY_REPLY_MESSAGE);
+					throw new RuntimeException(Messages.emptyReplyMessage);
 				}
 			}
 		} catch (IOException e) {
-			throw new RuntimeException(COMUNICATION_ERROR_MESSAGE + e.getMessage(), e);
+			throw new RuntimeException(Messages.comunicationErrorMessage + " " + e.getMessage(), e);
 		}
 	}
 

@@ -10,6 +10,7 @@ import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.TextConsole;
 
 public class ConsoleMessageManager {
+
 	private static final String PROCESS_CONSOLE_INTERNAL_CLASS = "org.eclipse.debug.internal.ui.views.console.ProcessConsole";
 
 	public static String getProcessConsoleOutput() {
@@ -36,13 +37,13 @@ public class ConsoleMessageManager {
 
 		return matcher.find();
 	}
-	
-	public static boolean isJavaLangException(String message) {
-	    String javaLangErrorRegex = "(?m)((java\\.lang\\.|java\\.net\\.)[A-Za-z]+(Error|Exception)):";
-	    Pattern pattern = Pattern.compile(javaLangErrorRegex);
-	    Matcher matcher = pattern.matcher(message);
 
-	    return matcher.find();
+	public static boolean isJavaLangException(String message) {
+		String javaLangErrorRegex = "(?m)((java\\.lang\\.|java\\.net\\.)[A-Za-z]+(Error|Exception)):";
+		Pattern pattern = Pattern.compile(javaLangErrorRegex);
+		Matcher matcher = pattern.matcher(message);
+
+		return matcher.find();
 	}
-	
+
 }

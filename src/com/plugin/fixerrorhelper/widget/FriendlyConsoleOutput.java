@@ -16,11 +16,19 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
+import com.plugin.fixerrorhelper.constants.TextSectionHeadersConstants;
+
 public class FriendlyConsoleOutput {
-	
+
 	private static final String TITLE = "FixErrorHelper";
+	
+	private static final String[] TEXT_SECTION_HEADERS = { 
+			TextSectionHeadersConstants.CAUSE,
+			TextSectionHeadersConstants.ERROR, 
+			TextSectionHeadersConstants.POSSIBLE_SOLUTIONS 
+	};
+	
 	private static final Map<String, Color> HEADER_COLORS = new HashMap<>();
-	private static final String[] TEXT_SECTION_HEADERS = { "Cause:", "Error:", "Possible solution(s):" };
 
 	private Display display;
 	private Color backgroundColor;
@@ -43,7 +51,7 @@ public class FriendlyConsoleOutput {
 		createOkButton(closeListener);
 
 		this.shell.addListener(SWT.Close, closeListener);
-		
+
 		return this.shell;
 	}
 
@@ -68,31 +76,31 @@ public class FriendlyConsoleOutput {
 
 		formatTextSections(styledText);
 	}
-	
+
 	private void setHeaderColors() {
-	    HEADER_COLORS.put("Cause:", new Color(display, 255, 190, 0));
-	    HEADER_COLORS.put("Error:", new Color(display, 255, 0, 0));
-	    HEADER_COLORS.put("Possible solution(s):", new Color(display, 30, 144, 255));
+		HEADER_COLORS.put(TextSectionHeadersConstants.CAUSE, new Color(display, 255, 190, 0));
+		HEADER_COLORS.put(TextSectionHeadersConstants.ERROR, new Color(display, 255, 0, 0));
+		HEADER_COLORS.put(TextSectionHeadersConstants.POSSIBLE_SOLUTIONS, new Color(display, 30, 144, 255));
 	}
-	
+
 	private void formatTextSections(StyledText styledText) {
 		this.setHeaderColors();
-		
-	    for (String header : TEXT_SECTION_HEADERS) {
-	        int index = message.indexOf(header);
 
-	        if (index >= 0) {
-	            StyleRange styleRange = new StyleRange();
-	            styleRange.start = index;
-	            styleRange.length = header.length();
-	            styleRange.fontStyle = SWT.BOLD;
-	            styleRange.foreground = HEADER_COLORS.getOrDefault(header, display.getSystemColor(SWT.COLOR_BLACK));
+		for (String header : TEXT_SECTION_HEADERS) {
+			int index = message.indexOf(header);
 
-	            styledText.setStyleRange(styleRange);
-	        }
-	    }
+			if (index >= 0) {
+				StyleRange styleRange = new StyleRange();
+				styleRange.start = index;
+				styleRange.length = header.length();
+				styleRange.fontStyle = SWT.BOLD;
+				styleRange.foreground = HEADER_COLORS.getOrDefault(header, display.getSystemColor(SWT.COLOR_BLACK));
+
+				styledText.setStyleRange(styleRange);
+			}
+		}
 	}
-	
+
 	private void createOkButton(final Listener listener) {
 		Button okButton = new Button(shell, SWT.PUSH);
 

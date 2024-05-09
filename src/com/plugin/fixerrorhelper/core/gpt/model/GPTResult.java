@@ -2,19 +2,26 @@ package com.plugin.fixerrorhelper.core.gpt.model;
 
 import org.json.JSONObject;
 
-public record GPTResult(String cause, 
-						String error, 
-						String solutions, 
-						boolean hasParseError, 
-						boolean isInsufficientQuota) {
+import com.plugin.fixerrorhelper.constants.TextSectionHeadersConstants;
+
+public record GPTResult(String cause, String error, String solutions, boolean hasParseError,
+		boolean isInsufficientQuota) {
 
 	public String formattedMessage() {
 		StringBuilder formattedResponse = new StringBuilder();
 
 		try {
-			formattedResponse.append("Cause: ").append(this.cause).append("\n\n");
-			formattedResponse.append("Error: ").append(this.error).append("\n\n");
-			formattedResponse.append("Possible solution(s): ").append(this.solutions).append("\n\n");
+			formattedResponse.append(TextSectionHeadersConstants.CAUSE + " ")
+							 .append(this.cause)
+							 .append("\n\n");
+			
+			formattedResponse.append(TextSectionHeadersConstants.ERROR + " ")
+							 .append(this.error)
+							 .append("\n\n");
+			
+			formattedResponse.append(TextSectionHeadersConstants.POSSIBLE_SOLUTIONS + " ")
+							 .append(this.solutions)
+							 .append("\n\n");
 		} catch (Exception e) {
 			formattedResponse.append("Error formatting response: ").append(e.getMessage());
 		}
@@ -36,14 +43,14 @@ public record GPTResult(String cause,
 			String content = messageObj.getString("content");
 			JSONObject contentObj = new JSONObject(content);
 
-			var cause = contentObj.getString(GPTMessageHelper.KEY_CAUSE);
-			var error = contentObj.getString(GPTMessageHelper.KEY_ERROR);
-			var solutions = contentObj.getString(GPTMessageHelper.KEY_POSSIBLE_SOLUTIONS);
+			var cause = contentObj.getString(TextSectionHeadersConstants.KEY_CAUSE);
+			var error = contentObj.getString(TextSectionHeadersConstants.KEY_ERROR);
+			var solutions = contentObj.getString(TextSectionHeadersConstants.KEY_POSSIBLE_SOLUTIONS);
 
 			return new GPTResult(cause, error, solutions, false, false);
 		} catch (Exception e) {
 			return new GPTResult(null, null, null, true, false);
 		}
 	}
-	
+
 }

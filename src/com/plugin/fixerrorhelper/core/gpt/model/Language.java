@@ -3,8 +3,9 @@ package com.plugin.fixerrorhelper.core.gpt.model;
 import java.util.stream.Stream;
 
 public enum Language {
+	
 	EN("English", "EN"),
-	PT_BR("Portugues", "PT-BR");
+	PT_BR("Portuguese", "PT-BR");
 	
 	private String description;
 	private String language;
@@ -14,13 +15,17 @@ public enum Language {
 		this.language = language;
 	}
 	
-	public String lang() {
+	public String getDescription() {
+	    return description;
+	}
+	
+	public String getLanguage() {
 		return language;
 	}
 	
 	public static Language of(String language) {
 		return Stream.of(Language.values())
-				.filter(l -> l.language == language)
+				.filter(l -> l.language.equals(language))
 				.findFirst()
 				.orElse(EN);
 	}
@@ -34,4 +39,5 @@ public enum Language {
 		
 		return array;
 	}
+	
 }

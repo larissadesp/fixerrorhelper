@@ -6,33 +6,30 @@ import java.util.regex.Pattern;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-class GPTMessageHelper {
+import com.plugin.fixerrorhelper.constants.TextSectionHeadersConstants;
 
-	public static final String KEY_CAUSE = "cause";
-	public static final String KEY_ERROR = "error";
-	public static final String KEY_POSSIBLE_SOLUTIONS = "possible solution(s)";
-	public static final String KEY_TYPE = "type";
-	
-	private static final String INSUFFICIENT_QUOTA = "insufficient_quota";
+class GPTMessageHelper {
 
 	public static boolean isInsufficientQuota(JSONObject jsonObject) {
 		try {
-			if (!jsonObject.has(KEY_ERROR)) {
+			if (!jsonObject.has(TextSectionHeadersConstants.KEY_ERROR)) {
 				return false;
 			}
 
-			Object errorObject = jsonObject.get(KEY_ERROR);
+			Object errorObject = jsonObject.get(TextSectionHeadersConstants.KEY_ERROR);
 
 			if (errorObject instanceof JSONObject) {
 				JSONObject errorJSONObject = (JSONObject) errorObject;
 
-				if (errorJSONObject.has(KEY_TYPE) && errorJSONObject.getString(KEY_TYPE).equals(INSUFFICIENT_QUOTA)) {
+				if (errorJSONObject.has(TextSectionHeadersConstants.KEY_TYPE)
+						&& errorJSONObject.getString(TextSectionHeadersConstants.KEY_TYPE)
+								.equals(TextSectionHeadersConstants.INSUFFICIENT_QUOTA)) {
 					return true;
 				}
-			} 
-			
+			}
+
 			if (errorObject instanceof String) {
-				if (errorObject.equals(INSUFFICIENT_QUOTA)) {
+				if (errorObject.equals(TextSectionHeadersConstants.INSUFFICIENT_QUOTA)) {
 					return true;
 				}
 			}
@@ -44,8 +41,8 @@ class GPTMessageHelper {
 	}
 
 	public static boolean checkIfCompleteAnswer(String responseChatGPT) {
-		String regexCause = "(Cause:)[\\s\\S]*?";
-		String regexError = "(Error:)[\\s\\S]*?";
+		String regexCause = "(" + TextSectionHeadersConstants.CAUSE + ")[\\s\\S]*?";
+		String regexError = "(" + TextSectionHeadersConstants.ERROR + ")[\\s\\S]*?";
 		String regexSolutions = "(Possible solution\\(s\\):)[\\s\\S]*?";
 
 		if (matchPattern(responseChatGPT, regexCause) && matchPattern(responseChatGPT, regexError)

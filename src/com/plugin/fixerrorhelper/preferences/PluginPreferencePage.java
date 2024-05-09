@@ -5,14 +5,12 @@ import java.net.URL;
 
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -25,8 +23,11 @@ import org.eclipse.ui.PlatformUI;
 import com.plugin.fixerrorhelper.Activator;
 import com.plugin.fixerrorhelper.constants.PreferenceConstants;
 import com.plugin.fixerrorhelper.core.gpt.model.Language;
+import com.plugin.fixerrorhelper.messages.Messages;
 
 public class PluginPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+
+	private static final String API_KEY_LINK = "https://platform.openai.com/api-keys";
 
 	private Composite mainComposite;
 
@@ -36,7 +37,7 @@ public class PluginPreferencePage extends FieldEditorPreferencePage implements I
 
 	@Override
 	public void init(IWorkbench workbench) {
-		setDescription(PreferenceConstants.DESCRIPTION);
+		setDescription(Messages.descriptionLabel);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 	}
 
@@ -45,33 +46,42 @@ public class PluginPreferencePage extends FieldEditorPreferencePage implements I
 		mainComposite = getFieldEditorParent();
 		mainComposite.setLayout(new GridLayout());
 		mainComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-        
-		Group group = addGroup("API Settings");
-		
+
+		Group group = addGroup(Messages.apiSettingsLabel);
+
 		addSpace();
 		createApiFieldEditor(group);
+
 		addSpace();
 		createLanguageFieldEditor(group);
 	}
+	
+	@Override
+	public boolean performOk() {
+		
+		return false;
+	}
 
 	protected void createApiFieldEditor(Group group) {
-		StringFieldEditor apiKeyFieldEditor = new StringFieldEditor(PreferenceConstants.PREFERENCE_API_KEY, "Your API Key", group);
+		StringFieldEditor apiKeyFieldEditor = new StringFieldEditor(PreferenceConstants.PREFERENCE_API_KEY,
+				Messages.apiKeyLabel, group);
 		apiKeyFieldEditor.setEmptyStringAllowed(false);
-		apiKeyFieldEditor.setErrorMessage(PreferenceConstants.ERROR_MESSAGE);
+		apiKeyFieldEditor.setErrorMessage(Messages.apiErrorMessage);
 		apiKeyFieldEditor.getTextControl(group).setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		apiKeyFieldEditor.getTextControl(group).setToolTipText(PreferenceConstants.HELP_MESSAGE);
+		apiKeyFieldEditor.getTextControl(group).setToolTipText(Messages.apiHelpMessage);
+
 		addField(apiKeyFieldEditor);
 
-		addLink(group, "Click here to get API key", "https://platform.openai.com/api-keys");
+		addLink(group, Messages.directLinkApiMessage, API_KEY_LINK);
 	}
 
 	protected void createLanguageFieldEditor(Group group) {
 		String[][] values = Language.keyMap();
-		ComboFieldEditor languageEditor = new ComboFieldEditor(PreferenceConstants.PREFERENCE_LANGUAGE, PreferenceConstants.LABEL_LANGUAGE, values, group);
-	
+
+		ComboFieldEditor languageEditor = new ComboFieldEditor(PreferenceConstants.PREFERENCE_LANGUAGE,
+				Messages.languageLabel, values, group);
 		languageEditor.getLabelControl(group).setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		languageEditor.getLabelControl(group).setToolTipText(PreferenceConstants.HELP_MESSAGE);
-		
+
 		addField(languageEditor);
 	}
 
