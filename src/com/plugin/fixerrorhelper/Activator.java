@@ -3,6 +3,8 @@ package com.plugin.fixerrorhelper;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import com.plugin.fixerrorhelper.messages.Messages;
+
 public class Activator extends AbstractUIPlugin {
 
 	public static final String PLUGIN_ID = "com.plugin.fixerrorhelper"; //$NON-NLS-1$
@@ -14,6 +16,7 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		INSTANCE = this;
+		Messages.loadProperties();
 	}
 
 	@Override

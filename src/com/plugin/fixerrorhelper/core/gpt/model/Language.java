@@ -2,10 +2,12 @@ package com.plugin.fixerrorhelper.core.gpt.model;
 
 import java.util.stream.Stream;
 
+import com.plugin.fixerrorhelper.constants.PreferenceConstants;
+
 public enum Language {
 	
-	EN("English", "EN"),
-	PT_BR("Portuguese", "PT-BR");
+	EN("English", PreferenceConstants.LANGUAGE_EN),
+	PT_BR("Portuguese", PreferenceConstants.LANGUAGE_PT_BR);
 	
 	private String description;
 	private String language;

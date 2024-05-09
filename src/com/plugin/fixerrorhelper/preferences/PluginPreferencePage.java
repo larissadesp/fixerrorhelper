@@ -57,11 +57,12 @@ public class PluginPreferencePage extends FieldEditorPreferencePage implements I
 	}
 	
 	@Override
-	public boolean performOk() {
-		
-		return false;
-	}
-
+    public boolean performOk() {
+        super.performOk();
+        Messages.loadProperties();
+        return true;
+    }
+	
 	protected void createApiFieldEditor(Group group) {
 		StringFieldEditor apiKeyFieldEditor = new StringFieldEditor(PreferenceConstants.PREFERENCE_API_KEY,
 				Messages.apiKeyLabel, group);

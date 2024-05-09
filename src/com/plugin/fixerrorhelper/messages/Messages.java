@@ -1,6 +1,7 @@
 package com.plugin.fixerrorhelper.messages;
 
-import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -10,9 +11,12 @@ import com.plugin.fixerrorhelper.constants.PreferenceConstants;
 
 public class Messages {
 
-	private Properties properties;
-	private String languageSelected;
-	private String propertiesFile;
+	private static final String MESSAGES_EN_US = "messages_en_US.properties";
+	private static final String MESSAGES_PT_BR = "messages_pt_BR.properties";
+
+	private static Properties properties;
+	private static String languageSelected;
+	private static String propertiesFile;
 
 	public Messages() {
 		properties = new Properties();
@@ -39,28 +43,30 @@ public class Messages {
 	public static String directLinkApiMessage;
 	public static String languageLabel;
 
-	private void getLanguageSelected() {
+	private static void getLanguageSelected() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		languageSelected = store.getString(PreferenceConstants.PREFERENCE_LANGUAGE);
 	}
 
-	private void loadProperties() {
+	public static void loadProperties() {
 		getLanguageSelected();
 
 		switch (languageSelected) {
-		case "IN":
-			propertiesFile = "messages_en_US.properties";
+		case PreferenceConstants.LANGUAGE_EN:
+			propertiesFile = MESSAGES_EN_US;
 			break;
-		case "PT-BR":
-			propertiesFile = "messages_pt_BR.properties";
+		case PreferenceConstants.LANGUAGE_PT_BR:
+			propertiesFile = MESSAGES_PT_BR;
 			break;
 		default:
-			propertiesFile = "messages_en_US.properties";
+			propertiesFile = MESSAGES_EN_US;
 			break;
 		}
 
-		try (FileInputStream input = new FileInputStream(propertiesFile)) {
-			properties.load(input);
+		InputStream file = new Messages().getClass().getResourceAsStream(propertiesFile);
+
+		try {
+			properties.load(file);
 
 			emptyReplyMessage = properties.getProperty("EmptyReply_Message");
 			comunicationErrorMessage = properties.getProperty("ComunicationError_Message");
@@ -77,9 +83,9 @@ public class Messages {
 			apiHelpMessage = properties.getProperty("ApiHelp_Message");
 			directLinkApiMessage = properties.getProperty("DirectLinkApi_Message");
 			languageLabel = properties.getProperty("Language_Label");
-
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+
 }

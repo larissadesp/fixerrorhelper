@@ -19,7 +19,7 @@ public class PluginPreferenceInitializer extends AbstractPreferenceInitializer {
 		}
 
 		if (!store.contains(PreferenceConstants.PREFERENCE_LANGUAGE)) {
-			store.setValue(PreferenceConstants.PREFERENCE_LANGUAGE, "EN");
+			store.setValue(PreferenceConstants.PREFERENCE_LANGUAGE, PreferenceConstants.LANGUAGE_EN);
 		}
 	}
 
