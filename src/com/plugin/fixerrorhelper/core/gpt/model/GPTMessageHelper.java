@@ -6,30 +6,32 @@ import java.util.regex.Pattern;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.plugin.fixerrorhelper.constants.TextSectionHeadersConstants;
+import com.plugin.fixerrorhelper.constants.PreferenceConstants;
+import com.plugin.fixerrorhelper.constants.SectionHeadersKeyConstants;
+import com.plugin.fixerrorhelper.messages.Messages;
 
 class GPTMessageHelper {
 
 	public static boolean isInsufficientQuota(JSONObject jsonObject) {
 		try {
-			if (!jsonObject.has(TextSectionHeadersConstants.KEY_ERROR)) {
+			if (!jsonObject.has(SectionHeadersKeyConstants.KEY_ERROR)) {
 				return false;
 			}
 
-			Object errorObject = jsonObject.get(TextSectionHeadersConstants.KEY_ERROR);
+			Object errorObject = jsonObject.get(SectionHeadersKeyConstants.KEY_ERROR);
 
 			if (errorObject instanceof JSONObject) {
 				JSONObject errorJSONObject = (JSONObject) errorObject;
 
-				if (errorJSONObject.has(TextSectionHeadersConstants.KEY_TYPE)
-						&& errorJSONObject.getString(TextSectionHeadersConstants.KEY_TYPE)
-								.equals(TextSectionHeadersConstants.INSUFFICIENT_QUOTA)) {
+				if (errorJSONObject.has(SectionHeadersKeyConstants.KEY_TYPE)
+						&& errorJSONObject.getString(SectionHeadersKeyConstants.KEY_TYPE)
+								.equals(SectionHeadersKeyConstants.INSUFFICIENT_QUOTA)) {
 					return true;
 				}
 			}
 
 			if (errorObject instanceof String) {
-				if (errorObject.equals(TextSectionHeadersConstants.INSUFFICIENT_QUOTA)) {
+				if (errorObject.equals(SectionHeadersKeyConstants.INSUFFICIENT_QUOTA)) {
 					return true;
 				}
 			}
@@ -41,10 +43,26 @@ class GPTMessageHelper {
 	}
 
 	public static boolean checkIfCompleteAnswer(String responseChatGPT) {
-		String regexCause = "(" + TextSectionHeadersConstants.CAUSE + ")[\\s\\S]*?";
-		String regexError = "(" + TextSectionHeadersConstants.ERROR + ")[\\s\\S]*?";
-		String regexSolutions = "(Possible solution\\(s\\):)[\\s\\S]*?";
+		String regexCause = "(" + Messages.cause + ")[\\s\\S]*?";
+		String regexError = "(" + Messages.error + ")[\\s\\S]*?";
+		String regexSolutionsIn = "(Possible solution\\(s\\):)[\\s\\S]*?";
+		String regexSolutionsPt = "(Possível\\(is\\) solução\\(ões\\):)[\\s\\S]*?";
+		String regexSolutions = "";
 
+		String languageSelected = Messages.languageSelected;
+
+		switch (languageSelected) {
+		case PreferenceConstants.LANGUAGE_EN:
+			regexSolutions = regexSolutionsIn;
+			break;
+		case PreferenceConstants.LANGUAGE_PT_BR:
+			regexSolutions = regexSolutionsPt;
+			break;
+		default:
+			regexSolutions = regexSolutionsIn;
+			break;
+		}
+		
 		if (matchPattern(responseChatGPT, regexCause) && matchPattern(responseChatGPT, regexError)
 				&& matchPattern(responseChatGPT, regexSolutions)) {
 			return true;

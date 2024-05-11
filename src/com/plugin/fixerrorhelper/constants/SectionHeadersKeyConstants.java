@@ -1,10 +1,6 @@
 package com.plugin.fixerrorhelper.constants;
 
-public class TextSectionHeadersConstants {
-	
-	public static final String CAUSE = "Cause:";
-	public static final String ERROR = "Error:";
-	public static final String POSSIBLE_SOLUTIONS = "Possible solution(s):";
+public class SectionHeadersKeyConstants {
 	
 	public static final String KEY_CAUSE = "cause";
 	public static final String KEY_ERROR = "error";

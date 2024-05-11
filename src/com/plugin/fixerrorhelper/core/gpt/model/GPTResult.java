@@ -1,8 +1,12 @@
 package com.plugin.fixerrorhelper.core.gpt.model;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.json.JSONObject;
 
-import com.plugin.fixerrorhelper.constants.TextSectionHeadersConstants;
+import com.plugin.fixerrorhelper.constants.SectionHeadersKeyConstants;
+import com.plugin.fixerrorhelper.messages.Messages;
 
 public record GPTResult(String cause, String error, String solutions, boolean hasParseError,
 		boolean isInsufficientQuota) {
@@ -11,15 +15,15 @@ public record GPTResult(String cause, String error, String solutions, boolean ha
 		StringBuilder formattedResponse = new StringBuilder();
 
 		try {
-			formattedResponse.append(TextSectionHeadersConstants.CAUSE + " ")
+			formattedResponse.append(Messages.cause + " ")
 							 .append(this.cause)
 							 .append("\n\n");
 			
-			formattedResponse.append(TextSectionHeadersConstants.ERROR + " ")
+			formattedResponse.append(Messages.error + " ")
 							 .append(this.error)
 							 .append("\n\n");
 			
-			formattedResponse.append(TextSectionHeadersConstants.POSSIBLE_SOLUTIONS + " ")
+			formattedResponse.append(Messages.possibleSolutions + " ")
 							 .append(this.solutions)
 							 .append("\n\n");
 		} catch (Exception e) {
@@ -27,6 +31,27 @@ public record GPTResult(String cause, String error, String solutions, boolean ha
 		}
 
 		return formattedResponse.toString();
+	}
+	
+	public static String formattedNumberedSolutions(String solutions) {
+		String regex = "\\d+\\..*?(?=\\d+\\.|$)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(solutions);
+        
+        StringBuilder formattedText = new StringBuilder();
+        
+        formattedText.append("\n");
+        int count = 1;
+        while (matcher.find()) {
+        	formattedText.append(matcher.group(0)).append("\n\n");
+            count++;
+        }
+        
+        if (count == 1) {
+            return solutions;
+        }
+        
+        return formattedText.toString();
 	}
 
 	public boolean isComplete() {
@@ -43,9 +68,11 @@ public record GPTResult(String cause, String error, String solutions, boolean ha
 			String content = messageObj.getString("content");
 			JSONObject contentObj = new JSONObject(content);
 
-			var cause = contentObj.getString(TextSectionHeadersConstants.KEY_CAUSE);
-			var error = contentObj.getString(TextSectionHeadersConstants.KEY_ERROR);
-			var solutions = contentObj.getString(TextSectionHeadersConstants.KEY_POSSIBLE_SOLUTIONS);
+			var cause = contentObj.getString(SectionHeadersKeyConstants.KEY_CAUSE);
+			var error = contentObj.getString(SectionHeadersKeyConstants.KEY_ERROR);
+			var solutions = contentObj.getString(SectionHeadersKeyConstants.KEY_POSSIBLE_SOLUTIONS);
+			
+			solutions = formattedNumberedSolutions(solutions);
 
 			return new GPTResult(cause, error, solutions, false, false);
 		} catch (Exception e) {

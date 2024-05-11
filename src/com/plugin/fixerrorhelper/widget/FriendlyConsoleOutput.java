@@ -16,16 +16,16 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
-import com.plugin.fixerrorhelper.constants.TextSectionHeadersConstants;
+import com.plugin.fixerrorhelper.messages.Messages;
 
 public class FriendlyConsoleOutput {
 
 	private static final String TITLE = "FixErrorHelper";
 	
 	private static final String[] TEXT_SECTION_HEADERS = { 
-			TextSectionHeadersConstants.CAUSE,
-			TextSectionHeadersConstants.ERROR, 
-			TextSectionHeadersConstants.POSSIBLE_SOLUTIONS 
+			Messages.cause,
+			Messages.error, 
+			Messages.possibleSolutions 
 	};
 	
 	private static final Map<String, Color> HEADER_COLORS = new HashMap<>();
@@ -78,9 +78,9 @@ public class FriendlyConsoleOutput {
 	}
 
 	private void setHeaderColors() {
-		HEADER_COLORS.put(TextSectionHeadersConstants.CAUSE, new Color(display, 255, 190, 0));
-		HEADER_COLORS.put(TextSectionHeadersConstants.ERROR, new Color(display, 255, 0, 0));
-		HEADER_COLORS.put(TextSectionHeadersConstants.POSSIBLE_SOLUTIONS, new Color(display, 30, 144, 255));
+		HEADER_COLORS.put(Messages.cause, new Color(display, 255, 190, 0));
+		HEADER_COLORS.put(Messages.error, new Color(display, 255, 0, 0));
+		HEADER_COLORS.put(Messages.possibleSolutions, new Color(display, 30, 144, 255));
 	}
 
 	private void formatTextSections(StyledText styledText) {
@@ -100,7 +100,7 @@ public class FriendlyConsoleOutput {
 			}
 		}
 	}
-
+	
 	private void createOkButton(final Listener listener) {
 		Button okButton = new Button(shell, SWT.PUSH);
 

@@ -15,7 +15,7 @@ public class Messages {
 	private static final String MESSAGES_PT_BR = "messages_pt_BR.properties";
 
 	private static Properties properties;
-	private static String languageSelected;
+	public static String languageSelected;
 	private static String propertiesFile;
 
 	public Messages() {
@@ -25,6 +25,11 @@ public class Messages {
 	// core.gpt > client > GPTHttpClient
 	public static String emptyReplyMessage;
 	public static String comunicationErrorMessage;
+	
+	// core.gpt > model > GPTResult
+	public static String cause;
+	public static String error;
+	public static String possibleSolutions;
 
 	// core.gpt > GPTService
 	public static String insufficientQuotaMessage;
@@ -43,13 +48,13 @@ public class Messages {
 	public static String directLinkApiMessage;
 	public static String languageLabel;
 
-	private static void getLanguageSelected() {
+	public static String getLanguageSelected() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		languageSelected = store.getString(PreferenceConstants.PREFERENCE_LANGUAGE);
+		return store.getString(PreferenceConstants.PREFERENCE_LANGUAGE);
 	}
 
 	public static void loadProperties() {
-		getLanguageSelected();
+		languageSelected = getLanguageSelected();
 
 		switch (languageSelected) {
 		case PreferenceConstants.LANGUAGE_EN:
@@ -70,6 +75,9 @@ public class Messages {
 
 			emptyReplyMessage = properties.getProperty("EmptyReply_Message");
 			comunicationErrorMessage = properties.getProperty("ComunicationError_Message");
+			cause = properties.getProperty("Cause");
+			error = properties.getProperty("Error");
+			possibleSolutions = properties.getProperty("PossibleSolutions");
 			insufficientQuotaMessage = properties.getProperty("InsufficientQuota_Message");
 			errorFormattingMessage = properties.getProperty("ErrorFormatting_Message");
 			errorProcessingMessage = properties.getProperty("ErrorProcessing_Message");
