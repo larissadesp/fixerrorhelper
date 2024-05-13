@@ -71,7 +71,6 @@ public record GPTResult(String cause, String error, String solutions, boolean ha
 			var cause = contentObj.getString(SectionHeadersKeyConstants.KEY_CAUSE);
 			var error = contentObj.getString(SectionHeadersKeyConstants.KEY_ERROR);
 			var solutions = contentObj.getString(SectionHeadersKeyConstants.KEY_POSSIBLE_SOLUTIONS);
-			
 			solutions = formattedNumberedSolutions(solutions);
 
 			return new GPTResult(cause, error, solutions, false, false);

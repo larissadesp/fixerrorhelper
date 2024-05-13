@@ -22,7 +22,7 @@ public class FriendlyConsoleOutput {
 
 	private static final String TITLE = "FixErrorHelper";
 	
-	private static final String[] TEXT_SECTION_HEADERS = { 
+	private static String[] TEXT_SECTION_HEADERS = { 
 			Messages.cause,
 			Messages.error, 
 			Messages.possibleSolutions 
@@ -83,8 +83,18 @@ public class FriendlyConsoleOutput {
 		HEADER_COLORS.put(Messages.possibleSolutions, new Color(display, 30, 144, 255));
 	}
 
+	private static void updateTextSectionHeaders() {
+        TEXT_SECTION_HEADERS = new String[] { 
+            Messages.cause,
+            Messages.error, 
+            Messages.possibleSolutions 
+        };
+    }
+	
 	private void formatTextSections(StyledText styledText) {
 		this.setHeaderColors();
+		
+		updateTextSectionHeaders();
 
 		for (String header : TEXT_SECTION_HEADERS) {
 			int index = message.indexOf(header);

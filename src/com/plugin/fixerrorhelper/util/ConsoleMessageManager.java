@@ -35,15 +35,73 @@ public class ConsoleMessageManager {
 		Pattern pattern = Pattern.compile(stackTraceRegex);
 		Matcher matcher = pattern.matcher(message);
 
-		return matcher.find();
+		var teste = matcher.find();
+		return teste;
 	}
 
-	public static boolean isJavaLangException(String message) {
-		String javaLangErrorRegex = "(?m)((java\\.lang\\.|java\\.net\\.)[A-Za-z]+(Error|Exception)):";
-		Pattern pattern = Pattern.compile(javaLangErrorRegex);
+	public static boolean isJavaErrorException(String message) {
+		String javaErrorRegex = "(?m)(java\\.[a-z]+\\.[a-zA-Z]+(Error|Exception)):";
+
+		Pattern pattern = Pattern.compile(javaErrorRegex);
 		Matcher matcher = pattern.matcher(message);
 
-		return matcher.find();
+		var teste = matcher.find();
+		return teste;
 	}
+
+	public static String getStackTraceClassName(String message) {
+		String regex = "Caused by: (.+)";
+		
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(message);
+
+		if (matcher.find()) {
+			String causedBy = matcher.group(1);
+			
+			regex = "([^:\\s]+)";
+            
+            pattern = Pattern.compile(regex);
+            matcher = pattern.matcher(causedBy);
+            
+            if (matcher.find()) {
+                return matcher.group(1);
+            }
+		}
+
+		return null;
+	}
+
+	public static boolean checkThrowable(String message) {
+		String className = getStackTraceClassName(message);
+
+		try {
+			Class<?> throwableClass = Class.forName("java.lang.Throwable");
+			Class<?> exceptionClass = Class.forName(className);
+
+			if (throwableClass.isAssignableFrom(exceptionClass)) {
+				return true;
+			}
+		} catch (ClassNotFoundException e) {
+			return false;
+		}
+
+		return false;
+	}
+
+//	public static boolean checkThrowableInheritance(String message) {
+//		return message.contains("Throwable") ||
+//			   message.contains("Exception") ||
+//	           message.contains("Error") ||
+//	           message.contains("RuntimeException") ||
+//	           message.contains("IOException") ||
+//	           message.contains("AWTError") ||
+//	           message.contains("ThreadDeath") ||
+//	           message.contains("OutOfMemoryError") ||
+//	           message.contains("ClassCastException") ||
+//	           message.contains("ArrayIndexOutOfBoundsException") ||
+//	           message.contains("NullPointerException") ||
+//	           message.contains("InputMismatchException") ||
+//	           message.contains("ArithmeticException");
+//	}
 
 }
