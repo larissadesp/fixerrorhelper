@@ -13,54 +13,45 @@ import com.plugin.fixerrorhelper.messages.Messages;
 
 class GPTMessageHelper {
 
-	public static boolean isInsufficientQuota(JSONObject jsonObject) {
-		try {
-			if (!jsonObject.has(SectionHeadersKeyConstants.KEY_ERROR)) {
-				return false;
-			}
+	public static String isErrorOfType(JSONObject jsonObject) {
+	    try {
+	        if (!jsonObject.has(SectionHeadersKeyConstants.KEY_ERROR)) {
+	            return "";
+	        }
 
-			Object errorObject = jsonObject.get(SectionHeadersKeyConstants.KEY_ERROR);
+	        Object errorObject = jsonObject.get(SectionHeadersKeyConstants.KEY_ERROR);
 
-			if (errorObject instanceof JSONObject) {
-				JSONObject errorJSONObject = (JSONObject) errorObject;
+	        if (errorObject instanceof JSONObject) {
+	            JSONObject errorJSONObject = (JSONObject) errorObject;
 
-				if (errorJSONObject.has(ApiKeyConstants.KEY_TYPE)
-						&& errorJSONObject.getString(ApiKeyConstants.KEY_TYPE)
-								.equals(ApiKeyConstants.INSUFFICIENT_QUOTA)) {
-					return true;
-				}
-			}
+	            if (errorJSONObject.has(ApiKeyConstants.KEY_TYPE)) {
+	                String errorType = errorJSONObject.getString(ApiKeyConstants.KEY_TYPE);
 
-			if (errorObject instanceof String) {
-				if (errorObject.equals(ApiKeyConstants.INSUFFICIENT_QUOTA)) {
-					return true;
-				}
-			}
-		} catch (JSONException e) {
-			return false;
-		}
+	                if (errorType.equals(ApiKeyConstants.INSUFFICIENT_QUOTA)) {
+	                    return ApiKeyConstants.INSUFFICIENT_QUOTA;
+	                }
+	                
+	                if (errorObject instanceof String) {
+						if (errorObject.equals(ApiKeyConstants.INSUFFICIENT_QUOTA)) {
+							return ApiKeyConstants.INSUFFICIENT_QUOTA;
+						}
+					}
 
-		return false;
-	}
+	                if (errorJSONObject.has(ApiKeyConstants.KEY_CODE)) {
+	                    String errorCode = errorJSONObject.getString(ApiKeyConstants.KEY_CODE);
 
-	public static boolean isContextLengthExceeded(JSONObject jsonObject) {
-		Object errorObject = jsonObject.get(SectionHeadersKeyConstants.KEY_ERROR);
+	                    if (errorType.equals(ApiKeyConstants.INVALID_REQUEST_ERROR) && 
+	                        errorCode.equals(ApiKeyConstants.CONTEXT_LENGTH_EXCEEDED)) {
+	                        return ApiKeyConstants.CONTEXT_LENGTH_EXCEEDED;
+	                    }
+	                }
+	            }
+	        } 
+	    } catch (JSONException e) {
+	    	return "";
+	    }
 
-		if (errorObject instanceof JSONObject) {
-			JSONObject errorJSONObject = (JSONObject) errorObject;
-
-			if (errorJSONObject.has(ApiKeyConstants.KEY_TYPE)
-					&& errorJSONObject.has(ApiKeyConstants.KEY_CODE)) {
-				
-				if (errorJSONObject.getString(ApiKeyConstants.KEY_TYPE)
-						.equals(ApiKeyConstants.INVALID_REQUEST_ERROR)
-						&& errorJSONObject.getString(ApiKeyConstants.KEY_CODE)
-								.equals(ApiKeyConstants.CONTEXT_LENGTH_EXCEEDED))
-					return true;
-			}
-		}
-
-		return false;
+	    return "";
 	}
 
 	public static boolean checkIfCompleteAnswer(String responseChatGPT) {

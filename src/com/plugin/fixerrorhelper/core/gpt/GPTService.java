@@ -3,6 +3,7 @@ package com.plugin.fixerrorhelper.core.gpt;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 
+import com.plugin.fixerrorhelper.constants.ApiKeyConstants;
 import com.plugin.fixerrorhelper.core.gpt.model.Language;
 import com.plugin.fixerrorhelper.messages.Messages;
 import com.plugin.fixerrorhelper.util.ConsoleMessageManager;
@@ -32,12 +33,15 @@ public class GPTService {
 							  .withApiKey(apiKey)
 							  .call();
 
-		if (result.isInsufficientQuota()) {
-			return Messages.insufficientQuotaMessage;
-		}
-		
-		if (result.isContextLengthExceeded()) {
-			return Messages.contextLengthExceeded;
+		if (result.isErrorOfType() != "") {
+			var errorType = result.isErrorOfType();
+			if (errorType == ApiKeyConstants.INSUFFICIENT_QUOTA) {
+				return Messages.insufficientQuotaMessage;
+			}
+			
+			if (errorType == ApiKeyConstants.CONTEXT_LENGTH_EXCEEDED) {
+				return Messages.contextLengthExceeded;
+			}
 		}
 
 		if (result.hasParseError()) {
