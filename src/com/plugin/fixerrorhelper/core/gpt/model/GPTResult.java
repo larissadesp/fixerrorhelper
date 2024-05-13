@@ -9,7 +9,7 @@ import com.plugin.fixerrorhelper.constants.SectionHeadersKeyConstants;
 import com.plugin.fixerrorhelper.messages.Messages;
 
 public record GPTResult(String cause, String error, String solutions, boolean hasParseError,
-		boolean isInsufficientQuota) {
+		boolean isInsufficientQuota, boolean isContextLengthExceeded) {
 
 	public String formattedMessage() {
 		StringBuilder formattedResponse = new StringBuilder();
@@ -61,7 +61,11 @@ public record GPTResult(String cause, String error, String solutions, boolean ha
 	public static GPTResult fromJson(JSONObject json) {
 		try {
 			if (GPTMessageHelper.isInsufficientQuota(json)) {
-				return new GPTResult(null, null, null, false, true);
+				return new GPTResult(null, null, null, false, true, false);
+			}
+			
+			if (GPTMessageHelper.isContextLengthExceeded(json)) {
+				return new GPTResult(null, null, null, false, false, true);
 			}
 
 			JSONObject messageObj = json.getJSONArray("choices").getJSONObject(0).getJSONObject("message");
@@ -73,9 +77,9 @@ public record GPTResult(String cause, String error, String solutions, boolean ha
 			var solutions = contentObj.getString(SectionHeadersKeyConstants.KEY_POSSIBLE_SOLUTIONS);
 			solutions = formattedNumberedSolutions(solutions);
 
-			return new GPTResult(cause, error, solutions, false, false);
+			return new GPTResult(cause, error, solutions, false, false, false);
 		} catch (Exception e) {
-			return new GPTResult(null, null, null, true, false);
+			return new GPTResult(null, null, null, true, false, false);
 		}
 	}
 

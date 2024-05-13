@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.plugin.fixerrorhelper.constants.ApiKeyConstants;
 import com.plugin.fixerrorhelper.constants.PreferenceConstants;
 import com.plugin.fixerrorhelper.constants.SectionHeadersKeyConstants;
 import com.plugin.fixerrorhelper.messages.Messages;
@@ -23,20 +24,40 @@ class GPTMessageHelper {
 			if (errorObject instanceof JSONObject) {
 				JSONObject errorJSONObject = (JSONObject) errorObject;
 
-				if (errorJSONObject.has(SectionHeadersKeyConstants.KEY_TYPE)
-						&& errorJSONObject.getString(SectionHeadersKeyConstants.KEY_TYPE)
-								.equals(SectionHeadersKeyConstants.INSUFFICIENT_QUOTA)) {
+				if (errorJSONObject.has(ApiKeyConstants.KEY_TYPE)
+						&& errorJSONObject.getString(ApiKeyConstants.KEY_TYPE)
+								.equals(ApiKeyConstants.INSUFFICIENT_QUOTA)) {
 					return true;
 				}
 			}
 
 			if (errorObject instanceof String) {
-				if (errorObject.equals(SectionHeadersKeyConstants.INSUFFICIENT_QUOTA)) {
+				if (errorObject.equals(ApiKeyConstants.INSUFFICIENT_QUOTA)) {
 					return true;
 				}
 			}
 		} catch (JSONException e) {
 			return false;
+		}
+
+		return false;
+	}
+
+	public static boolean isContextLengthExceeded(JSONObject jsonObject) {
+		Object errorObject = jsonObject.get(SectionHeadersKeyConstants.KEY_ERROR);
+
+		if (errorObject instanceof JSONObject) {
+			JSONObject errorJSONObject = (JSONObject) errorObject;
+
+			if (errorJSONObject.has(ApiKeyConstants.KEY_TYPE)
+					&& errorJSONObject.has(ApiKeyConstants.KEY_CODE)) {
+				
+				if (errorJSONObject.getString(ApiKeyConstants.KEY_TYPE)
+						.equals(ApiKeyConstants.INVALID_REQUEST_ERROR)
+						&& errorJSONObject.getString(ApiKeyConstants.KEY_CODE)
+								.equals(ApiKeyConstants.CONTEXT_LENGTH_EXCEEDED))
+					return true;
+			}
 		}
 
 		return false;
@@ -62,7 +83,7 @@ class GPTMessageHelper {
 			regexSolutions = regexSolutionsIn;
 			break;
 		}
-		
+
 		if (matchPattern(responseChatGPT, regexCause) && matchPattern(responseChatGPT, regexError)
 				&& matchPattern(responseChatGPT, regexSolutions)) {
 			return true;

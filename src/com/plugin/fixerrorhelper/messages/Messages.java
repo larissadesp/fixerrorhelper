@@ -33,6 +33,7 @@ public class Messages {
 
 	// core.gpt > GPTService
 	public static String insufficientQuotaMessage;
+	public static String contextLengthExceeded;
 	public static String errorFormattingMessage;
 	public static String errorProcessingMessage;
 	public static String notJavaMessage;
@@ -79,6 +80,7 @@ public class Messages {
 			error = properties.getProperty("Error");
 			possibleSolutions = properties.getProperty("PossibleSolutions");
 			insufficientQuotaMessage = properties.getProperty("InsufficientQuota_Message");
+			contextLengthExceeded = properties.getProperty("ContextLengthExceeded_Message");
 			errorFormattingMessage = properties.getProperty("ErrorFormatting_Message");
 			errorProcessingMessage = properties.getProperty("ErrorProcessing_Message");
 			notJavaMessage = properties.getProperty("NotJava_Message");

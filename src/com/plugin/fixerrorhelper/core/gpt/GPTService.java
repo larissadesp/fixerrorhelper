@@ -35,6 +35,10 @@ public class GPTService {
 		if (result.isInsufficientQuota()) {
 			return Messages.insufficientQuotaMessage;
 		}
+		
+		if (result.isContextLengthExceeded()) {
+			return Messages.contextLengthExceeded;
+		}
 
 		if (result.hasParseError()) {
 			return Messages.errorProcessingMessage;
