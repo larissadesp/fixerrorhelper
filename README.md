@@ -61,5 +61,3 @@ Open Eclipse and import the project as a plugin project:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-    [ add link LICENSE ] 
-
