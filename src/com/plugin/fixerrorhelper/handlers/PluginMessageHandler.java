@@ -24,7 +24,7 @@ public class PluginMessageHandler extends AbstractHandler {
 		var apiKey = PreferenceHelper.getApiKey(store);
 
 		var message = GPTService.makeFriendlyConsole(consoleOutput, Language.of(language), apiKey);
-		
+
 		FriendlyConsoleOutput.init(message)
 							 .draw(e -> { Activator.stop(); })
 							 .open();

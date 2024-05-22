@@ -9,11 +9,10 @@ Bundle-ClassPath: .,
 Bundle-Vendor: FixErrorHelper
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.ui.console;bundle-version="3.13.100",
- org.eclipse.jface.text;bundle-version="3.24.200",
- org.apache.httpcomponents.httpclient;bundle-version="4.5.14",
- org.apache.httpcomponents.httpcore;bundle-version="4.4.16",
- org.apache.commons.lang3;bundle-version="3.14.0"
+ org.apache.httpcomponents.httpcore;bundle-version="3.14.0",
+ org.eclipse.ui.console;bundle-version="3.12.0",
+ org.eclipse.jface.text;bundle-version="3.24.0",
+ org.apache.httpcomponents.httpclient;bundle-version="4.5.13"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Automatic-Module-Name: com.plugin.fixerrorhelper
 Bundle-ActivationPolicy: lazy

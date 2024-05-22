@@ -17,7 +17,7 @@ public class GPTCaller {
 				{
 					"cause": describe the cause of the error here, "
 					"error": describe the error here,
-					"possible_solutions": describe possible solutions here
+					"possible_solutions": describe possible solutions here (with line breaks if there is numbering)
 				}
 			""";
 

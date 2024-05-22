@@ -1,8 +1,5 @@
 package com.plugin.fixerrorhelper.core.gpt.model;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.json.JSONObject;
 
 import com.plugin.fixerrorhelper.constants.SectionHeadersKeyConstants;
@@ -33,27 +30,6 @@ public record GPTResult(String cause, String error, String solutions, boolean ha
 		return formattedResponse.toString();
 	}
 	
-	public static String formattedNumberedSolutions(String solutions) {
-		String regex = "\\d+\\..*?(?=\\d+\\.|$)";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(solutions);
-        
-        StringBuilder formattedText = new StringBuilder();
-        
-        formattedText.append("\n");
-        int count = 1;
-        while (matcher.find()) {
-        	formattedText.append(matcher.group(0)).append("\n\n");
-            count++;
-        }
-        
-        if (count == 1) {
-            return solutions;
-        }
-        
-        return formattedText.toString();
-	}
-
 	public boolean isComplete() {
 		return GPTMessageHelper.checkIfCompleteAnswer(formattedMessage());
 	}
@@ -68,16 +44,41 @@ public record GPTResult(String cause, String error, String solutions, boolean ha
 			JSONObject messageObj = json.getJSONArray("choices").getJSONObject(0).getJSONObject("message");
 			String content = messageObj.getString("content");
 			JSONObject contentObj = new JSONObject(content);
-
+			
 			var cause = contentObj.getString(SectionHeadersKeyConstants.KEY_CAUSE);
 			var error = contentObj.getString(SectionHeadersKeyConstants.KEY_ERROR);
 			var solutions = contentObj.getString(SectionHeadersKeyConstants.KEY_POSSIBLE_SOLUTIONS);
-			solutions = formattedNumberedSolutions(solutions);
-
+			solutions = formatSolutions(solutions);
+			
 			return new GPTResult(cause, error, solutions, false, "");
+			
 		} catch (Exception e) {
 			return new GPTResult(null, null, null, true, "");
 		}
 	}
+	
+	private static String formatSolutions(String solutions) {
+		StringBuilder formattedSolutions = new StringBuilder();
 
+		if (solutions.contains("1. ") && solutions.contains("2. ")) {
+			if (!solutions.startsWith("\\n")) {
+				solutions = "\\n" + solutions;
+			}
+
+			String[] solutionItems = solutions.split("\\\\n");
+
+			for (String item : solutionItems) {
+				formattedSolutions.append(item.trim()).append("\n");
+			}
+
+			if (formattedSolutions.length() > 0) {
+				formattedSolutions.setLength(formattedSolutions.length() - 1);
+			}
+
+			return formattedSolutions.toString();
+		}
+
+		return solutions;
+	}
+	
 }

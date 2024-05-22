@@ -1,6 +1,5 @@
 package com.plugin.fixerrorhelper.core.gpt;
 
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 
 import com.plugin.fixerrorhelper.constants.ApiKeyConstants;
@@ -11,11 +10,11 @@ import com.plugin.fixerrorhelper.util.ConsoleMessageManager;
 public class GPTService {
 
 	public static String makeFriendlyConsole(String consoleText, Language language, String apiKey) {
-		if (StringUtils.isBlank(consoleText)) {
+		if (consoleText == null || consoleText.isBlank()) {
 			return Messages.emptyConsoleMessage;
 		}
 
-		if (StringUtils.isBlank(apiKey)) {
+		if (apiKey == null || apiKey.isBlank()) {
 			return Messages.apiKeyInvalidMessage;
 		}
 
