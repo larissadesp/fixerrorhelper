@@ -49,59 +49,37 @@ public class ConsoleMessageManager {
 		return teste;
 	}
 
-	public static String getStackTraceClassName(String message) {
-		String regex = "Caused by: (.+)";
-		
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(message);
-
-		if (matcher.find()) {
-			String causedBy = matcher.group(1);
-			
-			regex = "([^:\\s]+)";
-            
-            pattern = Pattern.compile(regex);
-            matcher = pattern.matcher(causedBy);
-            
-            if (matcher.find()) {
-                return matcher.group(1);
-            }
-		}
-
-		return null;
-	}
-
 	public static boolean checkThrowable(String message) {
 		String className = getStackTraceClassName(message);
 
-		try {
-			Class<?> throwableClass = Class.forName("java.lang.Throwable");
-			Class<?> exceptionClass = Class.forName(className);
-
-			if (throwableClass.isAssignableFrom(exceptionClass)) {
-				return true;
+		if (className != null) {
+			try {
+				Class<?> throwableClass = Class.forName("java.lang.Throwable");
+				Class<?> exceptionClass = Class.forName(className);
+	
+				if (throwableClass.isAssignableFrom(exceptionClass)) {
+					return true;
+				}
+			} catch (ClassNotFoundException e) {
+				return false;
 			}
-		} catch (ClassNotFoundException e) {
-			return false;
 		}
 
 		return false;
 	}
+	
+	public static String getStackTraceClassName(String message) {
+	    String regex = "(?m)^(?:Exception in thread \".*\" |Caused by: )?([a-zA-Z_$][a-zA-Z\\d_$]*\\.[a-zA-Z_$][a-zA-Z\\d_$]*(?:\\.[a-zA-Z_$][a-zA-Z\\d_$]*)*)";
+	    Pattern pattern = Pattern.compile(regex);
+	    Matcher matcher = pattern.matcher(message);
 
-//	public static boolean checkThrowableInheritance(String message) {
-//		return message.contains("Throwable") ||
-//			   message.contains("Exception") ||
-//	           message.contains("Error") ||
-//	           message.contains("RuntimeException") ||
-//	           message.contains("IOException") ||
-//	           message.contains("AWTError") ||
-//	           message.contains("ThreadDeath") ||
-//	           message.contains("OutOfMemoryError") ||
-//	           message.contains("ClassCastException") ||
-//	           message.contains("ArrayIndexOutOfBoundsException") ||
-//	           message.contains("NullPointerException") ||
-//	           message.contains("InputMismatchException") ||
-//	           message.contains("ArithmeticException");
-//	}
+	    String className = null;
+	    
+	    while (matcher.find()) {
+	        className = matcher.group(1);
+	    }
+
+	    return className;
+	}
 
 }
