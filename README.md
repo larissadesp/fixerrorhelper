@@ -20,6 +20,8 @@ Before using the plugin, you need to configure it by setting your OpenAI API key
 - In the Language field, select the return language for plugin responses.
 - Click Apply to save the changes.
 
+![Preference page](images/preference_page.png)
+
 
 After configuring the plugin, follow these steps to use it:
 
