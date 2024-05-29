@@ -13,6 +13,26 @@ FixErrorHelper is a plugin specifically developed for Eclipse with the aim of si
     [ add link ]
 
 
+# Use
+
+Before using the plugin, you need to configure it by setting your OpenAI API key. To configure the plugin, follow these steps:
+
+- Access the plugin preferences page at: Preferences > FixErrorHelper
+- In the API Key field, enter your OpenAI API key (you can create a free account at https://platform.openai.com/signup and get $5 free credits).
+- In the Language field, select the return language for plugin responses.
+- Click Apply to save the changes.
+
+
+After configuring the plugin, follow these steps to use it:
+
+- Run your Java application in the Eclipse IDE.
+- If an error or exception is thrown, look for the message in the console.
+- Click on the plugin icon or access via shortcut (command + 6).
+- A pop-up window will appear with information regarding the error/exception and possible solutions to resolve the problem.
+
+Note: For the plugin to work, you need to have an internet connection to access the OpenAI API.
+
+
 # Technologies Used
 
 - Java 21.0.3 (LTS)
@@ -41,11 +61,6 @@ Open Eclipse and import the project as a plugin project:
 2. Eclipse will restart with the FixErrorHelper plugin activated.
   
   [ add plugin screenshot to toolbar and shortcut command + 6 ]
-
-
-# Project Structure:
-
-    [ add ]
 
 
 # How to Contribute:
