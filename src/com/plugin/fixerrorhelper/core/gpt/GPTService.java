@@ -19,11 +19,8 @@ public class GPTService {
 		}
 
 		if (!(ConsoleMessageManager.isStackTrace(consoleText)
-				&& ConsoleMessageManager.isJavaErrorException(consoleText))) {
-			return Messages.notJavaMessage;
-		}
-		
-		if (!ConsoleMessageManager.checkThrowable(consoleText)) {
+				&& ConsoleMessageManager.isJavaErrorException(consoleText)
+				&& ConsoleMessageManager.checkThrowable(consoleText))) {
 			return Messages.notJavaMessage;
 		}
 

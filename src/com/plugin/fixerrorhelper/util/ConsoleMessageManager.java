@@ -32,21 +32,20 @@ public class ConsoleMessageManager {
 
 	public static boolean isStackTrace(String message) {
 		String stackTraceRegex = "(?m)^.*?Exception.*(?:\\R+^\\s*at .*)+";
+		
 		Pattern pattern = Pattern.compile(stackTraceRegex);
 		Matcher matcher = pattern.matcher(message);
 
-		var teste = matcher.find();
-		return teste;
+		return matcher.find();
 	}
 
 	public static boolean isJavaErrorException(String message) {
-		String javaErrorRegex = "(?m)(java\\.[a-z]+\\.[a-zA-Z]+(Error|Exception)):";
+		String javaErrorRegex = "\\b(java\\.[a-z]+\\.[a-zA-Z]+(?:Error|Exception))\\b";
 
 		Pattern pattern = Pattern.compile(javaErrorRegex);
 		Matcher matcher = pattern.matcher(message);
 
-		var teste = matcher.find();
-		return teste;
+		return matcher.find();
 	}
 
 	public static boolean checkThrowable(String message) {

@@ -46,7 +46,7 @@
             <command
                   id="com.plugin.fixerrorhelper.toolbars.fixErrorHelperCommand"
                   commandId="com.plugin.fixerrorhelper.commands.fixErrorHelperCommand"
-                  icon="icons/sample.png">
+                  icon="icons/icon16.png">
             </command>
          </toolbar>
       </menuContribution>
