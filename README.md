@@ -3,9 +3,7 @@
 
 FixErrorHelper is a plugin specifically developed for Eclipse with the aim of simplifying the understanding of console messages related to Java errors or exceptions. The plugin should clearly and concisely provide the cause of the problem, the specific error, and possible solutions. Based on the established return pattern, FixErrorHelper aims to help developers identify and resolve issues more efficiently.
 
-    [ add java error/exception screenshot in console ]
-    
-    [ add plugin interface screenshot ]
+![Plugin return example](images/return_example.png)
 
 
 # Eclipse Marketplace
@@ -59,8 +57,6 @@ Open Eclipse and import the project as a plugin project:
 - Right-click on the project > Run As > Eclipse Application.
 
 2. Eclipse will restart with the FixErrorHelper plugin activated.
-  
-  [ add plugin screenshot to toolbar and shortcut command + 6 ]
 
 
 # How to Contribute:
