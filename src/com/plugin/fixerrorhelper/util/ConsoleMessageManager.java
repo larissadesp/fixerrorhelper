@@ -31,26 +31,33 @@ public class ConsoleMessageManager {
 	}
 
 	public static boolean isStackTrace(String message) {
-		String stackTraceRegex = "(?m)^.*?Exception.*(?:\\R+^\\s*at .*)+";
+	    String stackTraceRegex = "(?m)^.*?(Exception|Error|Throwable).*?(?:\\R+^\\s*at .*)+";
 		
 		Pattern pattern = Pattern.compile(stackTraceRegex);
 		Matcher matcher = pattern.matcher(message);
 
-		return matcher.find();
+		boolean foundStackTrace = matcher.find();
+	    System.out.println(foundStackTrace);
+	    
+	    return foundStackTrace;
 	}
 
-	public static boolean isJavaErrorException(String message) {
-		String javaErrorRegex = "\\b(java\\.[a-z]+\\.[a-zA-Z]+(?:Error|Exception))\\b";
+    public static boolean isJavaErrorException(String message) {
+        String javaErrorRegex = "(?m)^(?:\\s*Caused by: |\\s*)?(java\\.[\\w\\.]+Exception|java\\.[\\w\\.]+Error|java\\.[\\w\\.]+Throwable):";
 
-		Pattern pattern = Pattern.compile(javaErrorRegex);
-		Matcher matcher = pattern.matcher(message);
+        Pattern pattern = Pattern.compile(javaErrorRegex);
+        Matcher matcher = pattern.matcher(message);
 
-		return matcher.find();
-	}
+        boolean foundJavaErrorException = matcher.find();
+	    System.out.println(foundJavaErrorException);
+	    
+	    return foundJavaErrorException;
+    }
 
 	public static boolean checkThrowable(String message) {
 		String className = getStackTraceClassName(message);
-
+		System.out.println(className); 
+		
 		if (className != null) {
 			try {
 				Class<?> throwableClass = Class.forName("java.lang.Throwable");
