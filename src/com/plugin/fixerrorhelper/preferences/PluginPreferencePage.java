@@ -102,6 +102,7 @@ public class PluginPreferencePage extends FieldEditorPreferencePage implements I
 		});
 	}
 
+	@SuppressWarnings("deprecation")
 	protected void openUrl(String url) {
 		try {
 			PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(new URL(url));
