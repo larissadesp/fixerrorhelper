@@ -8,7 +8,7 @@ FixErrorHelper is a plugin specifically developed for Eclipse with the aim of si
 
 # Eclipse Marketplace
 
-    [ add link ]
+https://marketplace.eclipse.org/content/fixerrorhelper
 
 
 # Use
